@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { DATABASE_CONNECTION } from '../constants';
+import { DATABASE_CONNECTION } from '../../constants';
 
 export const databaseProviders = [
   {
