@@ -54,4 +54,12 @@ export class UserService {
       throw new InternalServerErrorException('Failed to update user');
     }
   }
+
+  async getAllUsers(): Promise<User[] | undefined> {
+    try {
+      return this.userModel.find();
+    } catch {
+      throw new InternalServerErrorException('Failed to get users');
+    }
+  }
 }

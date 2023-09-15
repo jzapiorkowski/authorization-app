@@ -2,6 +2,7 @@ import { UserService } from './user.service';
 import {
   Body,
   Controller,
+  Get,
   Param,
   Put,
   Req,
@@ -37,5 +38,12 @@ export class UserController {
     }
 
     throw new UnauthorizedException('Unauthorized access');
+  }
+
+  @Get('')
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(ROLE.ADMIN)
+  async getAllUsers() {
+    return this.userService.getAllUsers();
   }
 }
