@@ -10,10 +10,14 @@ import { User } from '../interfaces/user';
 import { USER_MODEL } from '../../constants';
 import { CreateUserDto } from '../dto/user.dto';
 import { Types } from 'mongoose';
+import { BcryptService } from '../bcrypt/bcrypt.service';
 
 @Injectable()
 export class UserService {
-  constructor(@Inject(USER_MODEL) private readonly userModel: Model<User>) {}
+  constructor(
+    @Inject(USER_MODEL) private readonly userModel: Model<User>,
+    private bcryptService: BcryptService
+  ) {}
 
   async findUser(username: string): Promise<User | undefined> {
     try {
@@ -32,6 +36,11 @@ export class UserService {
   }
 
   async updateUser(updateUserDto: UpdateUserDto, id: string) {
+    if (updateUserDto.password)
+      updateUserDto.password = await this.bcryptService.hashPassword(
+        updateUserDto.password
+      );
+
     try {
       const _id = new Types.ObjectId(id);
       const result = await this.userModel.updateOne({ _id }, updateUserDto);
