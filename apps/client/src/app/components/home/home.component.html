@@ -2,8 +2,10 @@
 <section>
   <div *ngIf="isLoggedIn; else notLoggedIn">
     <p>seems like you're logged in</p>
+    <button mat-raised-button (click)="toUserManagement()">
+      <a>manage account</a>
+    </button>
   </div>
-
   <ng-template #notLoggedIn>
     <p>Anonymous user</p>
     <button mat-raised-button (click)="toLogin()">
