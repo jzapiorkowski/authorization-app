@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 
 import * as moment from 'moment';
 import { shareReplay, tap } from 'rxjs';
+import { UserService } from '../../shared/services/user/user.service';
 
 interface LoginResponse {
   access_token: string;
@@ -12,7 +13,7 @@ interface LoginResponse {
 
 @Injectable()
 export class AuthService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private userService: UserService) {}
 
   login(username: string, password: string) {
     return this.http
@@ -23,10 +24,11 @@ export class AuthService {
       .pipe(tap(this.setSession), shareReplay());
   }
 
-  register(username: string, password: string) {
+  register(username: string, password: string, permissions: PERMISSION[] = []) {
     return this.http.post('http://localhost:3000/auth/signup', {
       username,
       password,
+      roles: [...permissions, 'USER'],
     });
   }
 
@@ -57,5 +59,11 @@ export class AuthService {
     const expiresAt = JSON.parse(expiration!);
 
     return moment(expiresAt);
+  }
+
+  hasPermission(requiredPermissions: PERMISSION[]): boolean {
+    return this.userService.getPermissions.some((permission) =>
+      requiredPermissions.includes(permission)
+    );
   }
 }

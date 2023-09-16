@@ -1,0 +1,32 @@
+mat-card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+
+  a {
+    color: white;
+    text-decoration: none;
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    align-items: center;
+    gap: 10px;
+
+    mat-form-field {
+      height: 50px;
+
+      mat-error {
+        color: red;
+        font-size: 12px;
+      }
+    }
+
+    button {
+      width: 200px;
+      color: white;
+    }
+  }
+}

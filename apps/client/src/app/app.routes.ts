@@ -10,7 +10,7 @@ export const appRoutes: Route[] = [
       import('./auth-form/auth-form.module').then((m) => m.AuthFormModule),
   },
   {
-    path: 'user',
+    path: 'manage',
     loadChildren: () =>
       import('./user-management/user-management.module').then(
         (m) => m.UserManagementModule

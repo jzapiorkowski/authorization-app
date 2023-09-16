@@ -14,6 +14,10 @@ export class UserService {
     return this.jwtService.decodeToken().username;
   }
 
+  get getPermissions(): PERMISSION[] {
+    return this.jwtService.decodeToken().roles;
+  }
+
   changePassword(userId: string, newPassword: string) {
     return this.http.put(`http://localhost:3000/user/update/${userId}`, {
       password: newPassword,

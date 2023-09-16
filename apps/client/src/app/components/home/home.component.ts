@@ -17,7 +17,7 @@ export class HomeComponent implements OnInit {
   }
 
   toUserManagement() {
-    this.router.navigate(['user']);
+    this.router.navigate(['manage']);
   }
 
   ngOnInit(): void {
