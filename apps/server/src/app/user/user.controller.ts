@@ -1,5 +1,6 @@
 import { UserService } from './user.service';
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
@@ -28,6 +29,10 @@ export class UserController {
     @Req() req
   ) {
     const { user } = req;
+
+    if (!updateUserDto || Object.keys(updateUserDto).length === 0) {
+      throw new BadRequestException('No data to update was provided.');
+    }
 
     if (user.roles.includes(ROLE.ADMIN)) {
       return this.userService.updateUser(updateUserDto, userId);

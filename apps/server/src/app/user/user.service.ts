@@ -1,5 +1,6 @@
 import { UpdateUserDto } from './../dto/user.dto';
 import {
+  BadRequestException,
   Inject,
   Injectable,
   InternalServerErrorException,
@@ -36,12 +37,12 @@ export class UserService {
   }
 
   async updateUser(updateUserDto: UpdateUserDto, id: string) {
-    if (updateUserDto.password)
-      updateUserDto.password = await this.bcryptService.hashPassword(
-        updateUserDto.password
-      );
-
     try {
+      if (updateUserDto.password)
+        updateUserDto.password = await this.bcryptService.hashPassword(
+          updateUserDto.password
+        );
+
       const _id = new Types.ObjectId(id);
       const result = await this.userModel.updateOne({ _id }, updateUserDto);
 
