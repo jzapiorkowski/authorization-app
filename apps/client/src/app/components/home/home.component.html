@@ -1,15 +1,14 @@
 <h3>Hello,</h3>
-<section>
-  <div *ngIf="isLoggedIn; else notLoggedIn">
-    <p>seems like you're logged in</p>
-    <button mat-raised-button (click)="toUserManagement()">
-      <a>manage account</a>
-    </button>
-  </div>
-  <ng-template #notLoggedIn>
-    <p>Anonymous user</p>
-    <button mat-raised-button (click)="toLogin()">
-      <a> click here to log in </a>
-    </button>
-  </ng-template>
-</section>
+<div *ngIf="isLoggedIn; else notLoggedIn">
+  <p>seems like you're logged in</p>
+  <button mat-raised-button (click)="toUserManagement()">
+    <a>manage account</a>
+  </button>
+  <button mat-raised-button (click)="logout()">Log out</button>
+</div>
+<ng-template #notLoggedIn>
+  <p>Anonymous user</p>
+  <button mat-raised-button (click)="toLogin()">
+    <a> click here to log in </a>
+  </button>
+</ng-template>
