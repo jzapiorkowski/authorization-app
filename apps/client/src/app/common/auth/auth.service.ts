@@ -23,6 +23,13 @@ export class AuthService {
       .pipe(tap(this.setSession), shareReplay());
   }
 
+  register(username: string, password: string) {
+    return this.http.post('http://localhost:3000/auth/signup', {
+      username,
+      password,
+    });
+  }
+
   private setSession(authResult: LoginResponse) {
     const match = authResult.expiresIn.match(/^(\d+)h$/);
     const hours = parseInt(match![1], 10);

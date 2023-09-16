@@ -5,15 +5,15 @@ import { MaterialModule } from '../material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { authFormRoutes } from './auth-form.routes';
+import { RegisterFormComponent } from './register-form/register-form.component';
 
 @NgModule({
-  declarations: [LoginFormComponent],
+  declarations: [LoginFormComponent, RegisterFormComponent],
   imports: [
     CommonModule,
     MaterialModule,
     ReactiveFormsModule,
     RouterModule.forChild(authFormRoutes),
   ],
-  exports: [LoginFormComponent],
 })
 export class AuthFormModule {}
