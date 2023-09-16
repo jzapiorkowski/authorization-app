@@ -21,7 +21,6 @@
           "error",
           {
             "type": "element",
-            "prefix": "authorization-app",
             "style": "kebab-case"
           }
         ]
