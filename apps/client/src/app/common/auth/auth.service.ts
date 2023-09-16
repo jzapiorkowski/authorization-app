@@ -1,3 +1,4 @@
+import { ACCESS_TOKEN, EXPIRES_AT } from './../../../contants';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
@@ -29,13 +30,13 @@ export class AuthService {
 
     const expiresAt = moment().add(expiresIn, 'second');
 
-    localStorage.setItem('access_token', authResult.access_token);
+    localStorage.setItem(ACCESS_TOKEN, authResult.access_token);
     localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
   }
 
   logout() {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('expires_at');
+    localStorage.removeItem(ACCESS_TOKEN);
+    localStorage.removeItem(EXPIRES_AT);
   }
 
   isLoggedIn() {
@@ -45,8 +46,7 @@ export class AuthService {
   }
 
   private getExpiration() {
-    const expiration = localStorage.getItem('expires_at');
-    const expiresAt = JSON.parse(expiration!);
+    const expiresAt = localStorage.getItem(EXPIRES_AT);
 
     return moment(expiresAt);
   }
