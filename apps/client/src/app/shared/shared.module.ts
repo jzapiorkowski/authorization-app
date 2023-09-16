@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ServicesModule } from './services/services.module';
+import { ComponentsModule } from '../components/components.module';
 
 @NgModule({
-  imports: [CommonModule, ServicesModule],
-  exports: [ServicesModule],
+  imports: [ServicesModule, ComponentsModule],
+  exports: [ServicesModule, ComponentsModule],
 })
 export class SharedModule {}

@@ -7,6 +7,7 @@ import { ComponentsModule } from './components/components.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from './shared/shared.module';
 import { interceptorsProviders } from './common/interceptors/interceptors.providers';
+import { servicesProviders } from './common/services/services.provider';
 
 @NgModule({
   declarations: [AppComponent],
@@ -17,7 +18,7 @@ import { interceptorsProviders } from './common/interceptors/interceptors.provid
     BrowserAnimationsModule,
     SharedModule,
   ],
-  providers: [...interceptorsProviders],
+  providers: [...interceptorsProviders, ...servicesProviders],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
