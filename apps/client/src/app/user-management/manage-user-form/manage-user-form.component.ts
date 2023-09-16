@@ -11,8 +11,9 @@ export class ManageUserFormComponent {
   constructor(private userService: UserService) {}
 
   @Input() userId!: string;
-
   @Input() username!: string;
+
+  success = false;
   form: FormGroup = new FormGroup({
     password: new FormControl('', [Validators.required]),
   });
@@ -21,8 +22,14 @@ export class ManageUserFormComponent {
     if (this.form.valid) {
       const { password } = this.form.value;
 
-      this.userService.changePassword(this.userId, password).subscribe(() => {
-        this.form.reset();
+      this.userService.changePassword(this.userId, password).subscribe({
+        next: () => {
+          this.form.reset();
+          this.success = true;
+        },
+        error: () => {
+          this.success = false;
+        },
       });
     }
   }
