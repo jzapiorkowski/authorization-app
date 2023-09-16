@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 import * as moment from 'moment';
 import { shareReplay, tap } from 'rxjs';
 import { UserService } from '../../shared/services/user.service';
+import { LocalStorageService } from '../local-storage/local-storage.service';
 
 interface LoginResponse {
   access_token: string;
@@ -13,7 +14,11 @@ interface LoginResponse {
 
 @Injectable()
 export class AuthService {
-  constructor(private http: HttpClient, private userService: UserService) {}
+  constructor(
+    private http: HttpClient,
+    private userService: UserService,
+    private localStorageService: LocalStorageService
+  ) {}
 
   login(username: string, password: string) {
     return this.http
@@ -21,7 +26,10 @@ export class AuthService {
         username,
         password,
       })
-      .pipe(tap(this.setSession), shareReplay());
+      .pipe(
+        tap((res) => this.setSession(res)),
+        shareReplay()
+      );
   }
 
   register(username: string, password: string, permissions: PERMISSION[] = []) {
@@ -39,13 +47,16 @@ export class AuthService {
 
     const expiresAt = moment().add(expiresIn, 'second');
 
-    localStorage.setItem(ACCESS_TOKEN, authResult.access_token);
-    localStorage.setItem(EXPIRES_AT, JSON.stringify(expiresAt.valueOf()));
+    this.localStorageService.setItem(ACCESS_TOKEN, authResult.access_token);
+    this.localStorageService.setItem(
+      EXPIRES_AT,
+      JSON.stringify(expiresAt.valueOf())
+    );
   }
 
   logout() {
-    localStorage.removeItem(ACCESS_TOKEN);
-    localStorage.removeItem(EXPIRES_AT);
+    this.localStorageService.removeItem(ACCESS_TOKEN);
+    this.localStorageService.removeItem(EXPIRES_AT);
   }
 
   isLoggedIn() {
@@ -55,7 +66,7 @@ export class AuthService {
   }
 
   private getExpiration() {
-    const expiration = localStorage.getItem(EXPIRES_AT);
+    const expiration = this.localStorageService.getItem(EXPIRES_AT);
     const expiresAt = JSON.parse(expiration!);
 
     return moment(expiresAt);

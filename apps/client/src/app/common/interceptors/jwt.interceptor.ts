@@ -18,7 +18,7 @@ export class JwtInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<unknown>> {
     request = request.clone({
       setHeaders: {
-        Authorization: `Bearer ${this.jwtService.getToken}`,
+        Authorization: `Bearer ${this.jwtService.token}`,
       },
     });
     return next.handle(request);
