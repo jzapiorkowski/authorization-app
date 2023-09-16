@@ -31,7 +31,7 @@ export class AuthService {
     const expiresAt = moment().add(expiresIn, 'second');
 
     localStorage.setItem(ACCESS_TOKEN, authResult.access_token);
-    localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
+    localStorage.setItem(EXPIRES_AT, JSON.stringify(expiresAt.valueOf()));
   }
 
   logout() {
@@ -41,12 +41,14 @@ export class AuthService {
 
   isLoggedIn() {
     const expiresAt = this.getExpiration();
+    console.log(expiresAt);
 
     return moment().isBefore(expiresAt);
   }
 
   private getExpiration() {
-    const expiresAt = localStorage.getItem(EXPIRES_AT);
+    const expiration = localStorage.getItem(EXPIRES_AT);
+    const expiresAt = JSON.parse(expiration!);
 
     return moment(expiresAt);
   }
