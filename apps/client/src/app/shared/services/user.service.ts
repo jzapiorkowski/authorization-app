@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { JwtService } from '../../../common/auth/jwt/jwt.service';
+import { JwtService } from '../../common/auth/jwt/jwt.service';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class UserService {
@@ -22,5 +23,9 @@ export class UserService {
     return this.http.put(`http://localhost:3000/user/update/${userId}`, {
       password: newPassword,
     });
+  }
+
+  get allUsers(): Observable<any> {
+    return this.http.get('http://localhost:3000/user').pipe();
   }
 }

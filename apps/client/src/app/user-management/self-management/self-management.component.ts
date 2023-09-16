@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { UserService } from '../../shared/services/user/user.service';
+import { UserService } from '../../shared/services/user.service';
 import { AuthService } from '../../common/auth/auth.service';
 
 @Component({
@@ -15,23 +14,13 @@ export class SelfManagementComponent implements OnInit {
   ) {}
 
   username!: string;
-  form: FormGroup = new FormGroup({
-    password: new FormControl('', [Validators.required]),
-  });
-
-  onSubmit() {
-    if (this.form.valid) {
-      const { password } = this.form.value;
-      const userId = this.userService.getUserId;
-
-      this.userService.changePassword(userId, password).subscribe(() => {
-        this.form.reset;
-      });
-    }
-  }
 
   ngOnInit(): void {
     this.username = this.userService.getUserUsername;
+  }
+
+  get userId(): string {
+    return this.userService.getUserId;
   }
 
   get isAdmin(): boolean {

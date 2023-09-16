@@ -4,8 +4,8 @@ import { UserManagementComponent } from './user-management.component';
 import { RouterModule } from '@angular/router';
 import { userManagementRoutes } from './user-management.routes';
 import { MaterialModule } from '../material/material.module';
-import { ReactiveFormsModule } from '@angular/forms';
 import { SelfManagementComponent } from './self-management/self-management.component';
+import { ManageUserFormModule } from './manage-user-form/manage-user-form.module';
 
 @NgModule({
   declarations: [UserManagementComponent, SelfManagementComponent],
@@ -13,7 +13,7 @@ import { SelfManagementComponent } from './self-management/self-management.compo
     CommonModule,
     RouterModule.forChild(userManagementRoutes),
     MaterialModule,
-    ReactiveFormsModule,
+    ManageUserFormModule,
   ],
 })
 export class UserManagementModule {}

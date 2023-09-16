@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 
 import * as moment from 'moment';
 import { shareReplay, tap } from 'rxjs';
-import { UserService } from '../../shared/services/user/user.service';
+import { UserService } from '../../shared/services/user.service';
 
 interface LoginResponse {
   access_token: string;

@@ -1,1 +1,14 @@
-<p>admin-management works!</p>
+<section>
+  <p *ngIf="isLoading; else usersList">Loading...</p>
+
+  <ng-template #usersList>
+    <h4>Here you can manage all users</h4>
+    <div class="users-list">
+      <app-manage-user-form
+        *ngFor="let user of users"
+        [userId]="user._id"
+        [username]="user.username"
+      ></app-manage-user-form>
+    </div>
+  </ng-template>
+</section>
