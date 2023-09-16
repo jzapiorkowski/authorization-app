@@ -6,11 +6,13 @@ import jwt_decode from 'jwt-decode';
   providedIn: 'root',
 })
 export class JwtService {
-  decodeToken(): any {
-    const token = localStorage.getItem(ACCESS_TOKEN)!;
+  get getToken(): string {
+    return localStorage.getItem(ACCESS_TOKEN)!;
+  }
 
+  decodeToken(): any {
     try {
-      return jwt_decode(token);
+      return jwt_decode(this.getToken);
     } catch (error) {
       console.error('Error decoding JWT token:', error);
       return null;
