@@ -1,7 +1,7 @@
 <mat-card>
   <mat-card-content>
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <p>here you can change your password!</p>
+      <p>{{ username }}, here you can change your password!</p>
       <mat-form-field appearance="fill">
         <input
           matInput
