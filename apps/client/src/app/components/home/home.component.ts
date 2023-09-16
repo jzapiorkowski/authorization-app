@@ -13,7 +13,7 @@ export class HomeComponent implements OnInit {
   isLoggedIn = false;
 
   toLogin() {
-    this.router.navigate(['login']);
+    this.router.navigate(['auth/login']);
   }
 
   ngOnInit(): void {

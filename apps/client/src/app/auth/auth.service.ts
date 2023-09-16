@@ -23,7 +23,11 @@ export class AuthService {
   }
 
   private setSession(authResult: LoginResponse) {
-    const expiresAt = moment().add(authResult.expiresIn, 'second');
+    const match = authResult.expiresIn.match(/^(\d+)h$/);
+    const hours = parseInt(match![1], 10);
+    const expiresIn = hours * 3600;
+
+    const expiresAt = moment().add(expiresIn, 'second');
 
     localStorage.setItem('access_token', authResult.access_token);
     localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
@@ -34,17 +38,16 @@ export class AuthService {
     localStorage.removeItem('expires_at');
   }
 
-  public isLoggedIn() {
-    return moment().isBefore(this.getExpiration());
+  isLoggedIn() {
+    const expiresAt = this.getExpiration();
+
+    return moment().isBefore(expiresAt);
   }
 
-  getExpiration() {
+  private getExpiration() {
     const expiration = localStorage.getItem('expires_at');
     const expiresAt = JSON.parse(expiration!);
 
-    const expiresInMilliseconds = moment.duration(expiresAt, 'milliseconds');
-    const expiresInHours = expiresInMilliseconds.asHours();
-
-    return moment().add(expiresInHours, 'hours');
+    return moment(expiresAt);
   }
 }
