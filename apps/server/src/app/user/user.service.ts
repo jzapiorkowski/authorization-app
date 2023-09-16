@@ -57,7 +57,7 @@ export class UserService {
 
   async getAllUsers(): Promise<User[] | undefined> {
     try {
-      return this.userModel.find();
+      return this.userModel.find({}, { _id: 1, username: 1, roles: 1 });
     } catch {
       throw new InternalServerErrorException('Failed to get users');
     }
