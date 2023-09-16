@@ -1,0 +1,9 @@
+<h3>Hello,</h3>
+<div *ngIf="isLoggedIn; else notLoggedIn">
+  <p>seems like you're logged in</p>
+</div>
+
+<ng-template #notLoggedIn>
+  <p>Anonymous user</p>
+  <button (click)="toLogin()">click here to log in</button>
+</ng-template>

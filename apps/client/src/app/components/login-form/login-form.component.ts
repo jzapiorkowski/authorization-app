@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../auth/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-form',
@@ -8,7 +9,7 @@ import { AuthService } from '../../auth/auth.service';
   styleUrls: ['./login-form.component.scss'],
 })
 export class LoginFormComponent {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   loginForm: FormGroup = new FormGroup({
     username: new FormControl('', [Validators.required]),
@@ -18,10 +19,9 @@ export class LoginFormComponent {
   onSubmit() {
     if (this.loginForm.valid) {
       const { username, password } = this.loginForm.value;
-
       this.authService
         .login(username, password)
-        .subscribe((x) => console.log(x));
+        .subscribe(() => this.router.navigate(['/']));
     }
   }
 }
