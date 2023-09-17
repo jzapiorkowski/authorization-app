@@ -1,13 +1,15 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   HttpCode,
   HttpStatus,
   Post,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginResponseDto, SignInDto } from '@authorization-app/libs';
+import { LoginResponseDto } from '@authorization-app/libs';
+import { SignInDto } from './auth.controller.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -15,15 +17,8 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
+  @UsePipes(new ValidationPipe({ transform: true }))
   signIn(@Body() { username, password }: SignInDto): Promise<LoginResponseDto> {
-    if (!username) {
-      throw new BadRequestException('Username is required in the request.');
-    }
-
-    if (!password) {
-      throw new BadRequestException('Password is required in the request.');
-    }
-
     return this.authService.signIn({ username, password });
   }
 }

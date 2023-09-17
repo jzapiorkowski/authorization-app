@@ -104,7 +104,7 @@ export class UserService {
         (user) =>
           ({
             _id: user._id.toHexString(),
-            username: user.password,
+            username: user.username,
             roles: user.roles,
           } as GetUserDataOutputDto)
       );

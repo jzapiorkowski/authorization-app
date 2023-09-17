@@ -10,6 +10,8 @@ import {
   Req,
   UnauthorizedException,
   UseGuards,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { RolesGuard } from '../auth/guards/roles/roles.guard';
@@ -33,6 +35,7 @@ export class UserController {
   }
 
   @Post('signup')
+  @UsePipes(new ValidationPipe({ transform: true }))
   async signUp(@Body() createUserDto: CreateUserRequestDto) {
     if (!createUserDto.username) {
       throw new BadRequestException('Username is required in the request.');
@@ -53,6 +56,7 @@ export class UserController {
   @Put('update/:id')
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(ROLE.USER, ROLE.ADMIN)
+  @UsePipes(new ValidationPipe({ transform: true }))
   async updateUser(
     @Param('id') userId: string,
     @Body() updateUserDto: UpdateUserDtoRequest,
