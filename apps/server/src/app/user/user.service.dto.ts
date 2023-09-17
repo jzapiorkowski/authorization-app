@@ -19,6 +19,12 @@ export interface UserOutputDto {
   _id: Types.ObjectId;
 }
 
+export interface GetUserDataOutputDto {
+  roles: ROLE[];
+  _id: string;
+  username: string;
+}
+
 export interface UserOutputDto {
   roles: ROLE[];
   _id: Types.ObjectId;
@@ -46,4 +52,9 @@ export interface FindUserByUserNameOrIdOutputDto {
 export interface GetUserInputDto {
   password: string;
   username: string;
+}
+
+export interface GetUsersInputDto {
+  _id?: string;
+  username?: string;
 }

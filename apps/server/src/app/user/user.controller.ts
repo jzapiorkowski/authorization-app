@@ -29,8 +29,7 @@ export class UserController {
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(ROLE.ADMIN)
   async getAllUsers(): Promise<UserResponseDto[]> {
-    // @ts-ignore
-    return this.userService.getAllUsers();
+    return this.userService.getUsers({});
   }
 
   @Post('signup')

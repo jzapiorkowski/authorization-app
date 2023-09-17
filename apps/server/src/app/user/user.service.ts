@@ -16,6 +16,8 @@ import {
   UserOutputDto,
   FindUserByUserNameOrIdInputDto,
   FindUserByUserNameOrIdOutputDto,
+  GetUserDataOutputDto,
+  GetUsersInputDto,
 } from './user.service.dto';
 
 @Injectable()
@@ -90,9 +92,22 @@ export class UserService {
     }
   }
 
-  async getAllUsers(): Promise<UserOutputDto[]> {
+  async getUsers(userQuery: GetUsersInputDto): Promise<GetUserDataOutputDto[]> {
     try {
-      return this.userModel.find({}, { _id: 1, username: 1, roles: 1 });
+      const users = await this.userModel.find(userQuery, {
+        _id: 1,
+        username: 1,
+        roles: 1,
+      });
+
+      return users.map(
+        (user) =>
+          ({
+            _id: user._id.toHexString(),
+            username: user.password,
+            roles: user.roles,
+          } as GetUserDataOutputDto)
+      );
     } catch {
       throw new InternalServerErrorException('Failed to get users');
     }
