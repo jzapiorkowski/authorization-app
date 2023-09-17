@@ -1,7 +1,7 @@
-import { ACCESS_TOKEN } from './../../../../contants';
 import { Injectable } from '@angular/core';
 import jwt_decode from 'jwt-decode';
 import { LocalStorageService } from '../../local-storage/local-storage.service';
+import { ACCESS_TOKEN } from '@authorization-app/libs';
 @Injectable({
   providedIn: 'root',
 })

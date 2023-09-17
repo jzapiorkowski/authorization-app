@@ -1,3 +1,4 @@
+import { ROLE, UserResponseDto } from '@authorization-app/libs';
 import { Injectable } from '@angular/core';
 import { JwtService } from '../../common/auth/jwt/jwt.service';
 import { HttpClient } from '@angular/common/http';
@@ -7,15 +8,15 @@ import { Observable } from 'rxjs';
 export class UserService {
   constructor(private jwtService: JwtService, private http: HttpClient) {}
 
-  get getUserId() {
+  get getUserId(): string {
     return this.jwtService.decodeToken().sub;
   }
 
-  get getUserUsername() {
+  get getUserUsername(): string {
     return this.jwtService.decodeToken().username;
   }
 
-  get getPermissions(): PERMISSION[] {
+  get getPermissions(): ROLE[] {
     return this.jwtService.decodeToken().roles;
   }
 
@@ -25,7 +26,9 @@ export class UserService {
     });
   }
 
-  get allUsers(): Observable<any> {
-    return this.http.get('http://localhost:3000/user').pipe();
+  get allUsers(): Observable<UserResponseDto[]> {
+    return this.http
+      .get<UserResponseDto[]>('http://localhost:3000/user')
+      .pipe();
   }
 }

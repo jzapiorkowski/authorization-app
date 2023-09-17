@@ -7,7 +7,11 @@ import {
   Post,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { SignInDto } from '../dto/signIn.dto';
+import {
+  LoginResponseDto,
+  SignInDto,
+  UserResponseDto,
+} from '@authorization-app/libs';
 import { CreateUserDto } from '../dto/user.dto';
 
 @Controller('auth')
@@ -16,7 +20,7 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  signIn(@Body() { username, password }: SignInDto) {
+  signIn(@Body() { username, password }: SignInDto): Promise<LoginResponseDto> {
     if (!username) {
       throw new BadRequestException('Username is required in the request.');
     }
@@ -29,7 +33,7 @@ export class AuthController {
   }
 
   @Post('signup')
-  signUp(@Body() createUserDto: CreateUserDto) {
+  signUp(@Body() createUserDto: CreateUserDto): Promise<UserResponseDto> {
     if (!createUserDto.username) {
       throw new BadRequestException('Username is required in the request.');
     }

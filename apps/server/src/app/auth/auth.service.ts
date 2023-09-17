@@ -8,6 +8,12 @@ import { UserService } from '../user/user.service';
 import { JwtService } from './jwt/jwt.service';
 import { BcryptService } from '../bcrypt/bcrypt.service';
 import { TOKEN_EXPIRATION } from '../../constants';
+import {
+  ACCESS_TOKEN,
+  EXPIRES_IN,
+  LoginResponseDto,
+  UserResponseDto,
+} from '@authorization-app/libs';
 
 @Injectable()
 export class AuthService {
@@ -17,7 +23,7 @@ export class AuthService {
     private bcryptService: BcryptService
   ) {}
 
-  async signIn(username: string, password: string) {
+  async signIn(username: string, password: string): Promise<LoginResponseDto> {
     try {
       const user = await this.userService.findUser(username);
 
@@ -42,26 +48,30 @@ export class AuthService {
       };
 
       return {
-        access_token: await this.jwtService.generateToken(payload),
-        expiresIn: TOKEN_EXPIRATION,
+        [ACCESS_TOKEN]: await this.jwtService.generateToken(payload),
+        [EXPIRES_IN]: TOKEN_EXPIRATION,
       };
     } catch {
       throw new InternalServerErrorException('Failed to log in');
     }
   }
 
-  async signUp(createUserDto: CreateUserDto) {
+  async signUp(createUserDto: CreateUserDto): Promise<UserResponseDto> {
     try {
       const hashedPassword = await this.bcryptService.hashPassword(
         createUserDto.password
       );
 
-      const result = await this.userService.createUser({
+      const { _id, roles, username } = await this.userService.createUser({
         ...createUserDto,
         password: hashedPassword,
       });
 
-      return result;
+      return {
+        _id,
+        roles,
+        username,
+      };
     } catch {
       throw new InternalServerErrorException('Failed to register');
     }

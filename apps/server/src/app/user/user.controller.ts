@@ -11,10 +11,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '../auth/guards/auth.guard';
-import { UpdateUserDto } from '../dto/user.dto';
 import { RolesGuard } from '../auth/guards/roles/roles.guard';
 import { Roles } from '../auth/guards/roles/role.decorator';
-import { ROLE } from '../auth/guards/roles/role.enum';
+import { ROLE, UserResponseDto } from '@authorization-app/libs';
+import { UpdateUserDto } from '../dto/user.dto';
 
 @Controller('user')
 export class UserController {
@@ -35,11 +35,13 @@ export class UserController {
     }
 
     if (user.roles.includes(ROLE.ADMIN)) {
-      return this.userService.updateUser(updateUserDto, userId);
+      await this.userService.updateUser(updateUserDto, userId);
+      return { message: 'success' };
     }
 
     if (user.sub === userId) {
-      return this.userService.updateUser(updateUserDto, userId);
+      await this.userService.updateUser(updateUserDto, userId);
+      return { message: 'success' };
     }
 
     throw new UnauthorizedException('Unauthorized access');
@@ -48,7 +50,7 @@ export class UserController {
   @Get('')
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(ROLE.ADMIN)
-  async getAllUsers() {
+  async getAllUsers(): Promise<UserResponseDto[]> {
     return this.userService.getAllUsers();
   }
 }

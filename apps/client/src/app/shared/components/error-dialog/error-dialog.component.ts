@@ -12,8 +12,4 @@ export class ErrorDialogComponent {
   get error() {
     return this.data.error || 'Something went wrong';
   }
-
-  lognij() {
-    console.log(this.error);
-  }
 }

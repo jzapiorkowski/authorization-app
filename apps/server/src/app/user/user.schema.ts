@@ -1,5 +1,5 @@
+import { ROLE } from '@authorization-app/libs';
 import { Schema } from 'mongoose';
-import { ROLE } from '../auth/guards/roles/role.enum';
 
 export const UserSchema = new Schema({
   username: {

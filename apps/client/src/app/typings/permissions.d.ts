@@ -1,1 +1,0 @@
-type PERMISSION = 'ADMIN' | 'USER';

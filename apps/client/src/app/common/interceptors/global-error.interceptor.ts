@@ -16,7 +16,6 @@ export class GlobalErrorInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<unknown>, next: HttpHandler) {
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
-        console.log('error is intercept');
         console.error(error);
 
         const dialogRef = this.dialog.open(ErrorDialogComponent, {

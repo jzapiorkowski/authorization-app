@@ -1,17 +1,15 @@
-import { UpdateUserDto } from './../dto/user.dto';
+import { UpdateUserDto, CreateUserDto } from './../dto/user.dto';
 import {
-  BadRequestException,
   Inject,
   Injectable,
   InternalServerErrorException,
-  NotFoundException,
 } from '@nestjs/common';
 import { Model } from 'mongoose';
-import { User } from '../interfaces/user';
 import { USER_MODEL } from '../../constants';
-import { CreateUserDto } from '../dto/user.dto';
 import { Types } from 'mongoose';
 import { BcryptService } from '../bcrypt/bcrypt.service';
+import { UserResponseDto } from '@authorization-app/libs';
+import { User } from '../models/user';
 
 @Injectable()
 export class UserService {
@@ -22,13 +20,16 @@ export class UserService {
 
   async findUser(username: string): Promise<User | undefined> {
     try {
-      return this.userModel.findOne({ username });
+      return this.userModel.findOne(
+        { username },
+        { _id: 1, username: 1, roles: 1, password: 1 }
+      );
     } catch {
       throw new InternalServerErrorException('Failed to find user');
     }
   }
 
-  async createUser(createUserDto: CreateUserDto) {
+  async createUser(createUserDto: CreateUserDto): Promise<User> {
     try {
       return this.userModel.create(createUserDto);
     } catch {
@@ -46,17 +47,13 @@ export class UserService {
       const _id = new Types.ObjectId(id);
       const result = await this.userModel.updateOne({ _id }, updateUserDto);
 
-      if (result.modifiedCount === 0) {
-        throw new NotFoundException('User not found');
-      }
-
       return result;
     } catch (error) {
       throw new InternalServerErrorException('Failed to update user');
     }
   }
 
-  async getAllUsers(): Promise<User[] | undefined> {
+  async getAllUsers(): Promise<UserResponseDto[]> {
     try {
       return this.userModel.find({}, { _id: 1, username: 1, roles: 1 });
     } catch {

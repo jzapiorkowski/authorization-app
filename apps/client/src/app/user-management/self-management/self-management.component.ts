@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../shared/services/user.service';
 import { AuthService } from '../../common/auth/auth.service';
+import { ROLE } from '@authorization-app/libs';
 
 @Component({
   selector: 'app-self-management',
@@ -24,6 +25,6 @@ export class SelfManagementComponent implements OnInit {
   }
 
   get isAdmin(): boolean {
-    return this.authService.hasPermission(['ADMIN']);
+    return this.authService.hasPermission([ROLE.ADMIN]);
   }
 }

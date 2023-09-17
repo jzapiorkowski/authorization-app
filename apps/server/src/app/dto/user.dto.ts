@@ -1,4 +1,4 @@
-import { ROLE } from '../auth/guards/roles/role.enum';
+import { ROLE } from '@authorization-app/libs';
 
 export interface UpdateUserDto {
   username?: string;

@@ -2,8 +2,6 @@
   <mat-card-content>
     <p>{{ username }}, here you can change your password!</p>
     <app-manage-user-form [userId]="userId"></app-manage-user-form>
-    <button mat-raised-button>
-      <a *ngIf="isAdmin" routerLink="admin">go to admin management</a>
-    </button>
+    <a *ngIf="isAdmin" routerLink="admin">go to admin management</a>
   </mat-card-content>
 </mat-card>
