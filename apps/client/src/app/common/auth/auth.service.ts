@@ -7,12 +7,10 @@ import { UserService } from '../../shared/services/user.service';
 import { LocalStorageService } from '../local-storage/local-storage.service';
 import {
   ACCESS_TOKEN,
-  CreateUserRequestDto,
   EXPIRES_AT,
   LoginResponseDto,
   ROLE,
   SignInDto,
-  UserResponseDto,
 } from '@authorization-app/libs';
 
 @Injectable()
@@ -33,21 +31,6 @@ export class AuthService {
         tap((res) => this.setSession(res)),
         shareReplay()
       );
-  }
-
-  register({
-    username,
-    password,
-    roles = [],
-  }: CreateUserRequestDto): Observable<UserResponseDto> {
-    return this.http.post<UserResponseDto>(
-      'http://localhost:3000/user/signup',
-      {
-        username,
-        password,
-        roles,
-      }
-    );
   }
 
   private setSession(authResult: LoginResponseDto): void {

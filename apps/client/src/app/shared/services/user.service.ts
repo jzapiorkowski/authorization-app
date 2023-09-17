@@ -1,4 +1,8 @@
-import { ROLE, UserResponseDto } from '@authorization-app/libs';
+import {
+  CreateUserRequestDto,
+  ROLE,
+  UserResponseDto,
+} from '@authorization-app/libs';
 import { Injectable } from '@angular/core';
 import { JwtService } from '../../common/auth/jwt/jwt.service';
 import { HttpClient } from '@angular/common/http';
@@ -30,5 +34,20 @@ export class UserService {
     return this.http
       .get<UserResponseDto[]>('http://localhost:3000/user')
       .pipe();
+  }
+
+  register({
+    username,
+    password,
+    roles = [],
+  }: CreateUserRequestDto): Observable<UserResponseDto> {
+    return this.http.post<UserResponseDto>(
+      'http://localhost:3000/user/signup',
+      {
+        username,
+        password,
+        roles,
+      }
+    );
   }
 }

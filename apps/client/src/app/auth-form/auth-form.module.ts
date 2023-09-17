@@ -6,6 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { authFormRoutes } from './auth-form.routes';
 import { RegisterFormComponent } from './register-form/register-form.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [LoginFormComponent, RegisterFormComponent],
@@ -14,6 +15,7 @@ import { RegisterFormComponent } from './register-form/register-form.component';
     MaterialModule,
     ReactiveFormsModule,
     RouterModule.forChild(authFormRoutes),
+    SharedModule,
   ],
 })
 export class AuthFormModule {}
