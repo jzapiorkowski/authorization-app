@@ -20,7 +20,8 @@ export class GlobalErrorInterceptor implements HttpInterceptor {
 
         const dialogRef = this.dialog.open(ErrorDialogComponent, {
           data: {
-            error: error?.message || 'Something went wrong',
+            error:
+              error?.error?.message || error?.message || 'Something went wrong',
           },
           maxWidth: '350px',
           position: {

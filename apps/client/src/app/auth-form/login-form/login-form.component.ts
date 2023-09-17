@@ -20,7 +20,7 @@ export class LoginFormComponent {
     if (this.loginForm.valid) {
       const { username, password } = this.loginForm.value;
       this.authService
-        .login(username, password)
+        .login({ username, password })
         .subscribe(() => this.router.navigate(['/']));
     }
   }

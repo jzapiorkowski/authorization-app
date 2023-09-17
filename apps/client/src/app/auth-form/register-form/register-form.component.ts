@@ -20,7 +20,7 @@ export class RegisterFormComponent {
     if (this.form.valid) {
       const { username, password } = this.form.value;
       this.authService
-        .register(username, password)
+        .register({ username, password })
         .subscribe(() => this.router.navigate(['/auth/login']));
     }
   }

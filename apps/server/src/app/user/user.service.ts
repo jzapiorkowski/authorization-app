@@ -1,46 +1,83 @@
-import { UpdateUserDto, CreateUserDto } from './../dto/user.dto';
 import {
   Inject,
   Injectable,
   InternalServerErrorException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { USER_MODEL } from '../../constants';
 import { Types } from 'mongoose';
-import { BcryptService } from '../bcrypt/bcrypt.service';
-import { UserResponseDto } from '@authorization-app/libs';
-import { User } from '../models/user';
+import { UserDocument } from './user.schema';
+import { EncryptionService } from '../utils/encryption/encryption.service';
+import {
+  CreateUserInputDto,
+  GetUserInputDto,
+  UpdateUserInputDto,
+  UserOutputDto,
+  FindUserByUserNameOrIdInputDto,
+  FindUserByUserNameOrIdOutputDto,
+} from './user.service.dto';
 
 @Injectable()
 export class UserService {
   constructor(
-    @Inject(USER_MODEL) private readonly userModel: Model<User>,
-    private bcryptService: BcryptService
+    @Inject(USER_MODEL) private readonly userModel: Model<UserDocument>,
+    private encryptionService: EncryptionService
   ) {}
 
-  async findUser(username: string): Promise<User | undefined> {
+  private async getUserByUserNameOrId(
+    findUserInputDto: FindUserByUserNameOrIdInputDto
+  ): Promise<FindUserByUserNameOrIdOutputDto> {
     try {
-      return this.userModel.findOne(
-        { username },
-        { _id: 1, username: 1, roles: 1, password: 1 }
-      );
+      return this.userModel.findOne(findUserInputDto, {
+        _id: 1,
+        username: 1,
+        password: 1,
+        roles: 1,
+      });
     } catch {
       throw new InternalServerErrorException('Failed to find user');
     }
   }
 
-  async createUser(createUserDto: CreateUserDto): Promise<User> {
+  async findUser({
+    username,
+    password,
+  }: GetUserInputDto): Promise<UserOutputDto> {
     try {
+      const user = await this.getUserByUserNameOrId({ username });
+
+      const isPasswordMatching = await this.encryptionService.checkPassword(
+        password,
+        user.password
+      );
+
+      if (!isPasswordMatching) {
+        throw new UnauthorizedException('Username or password is incorrect');
+      }
+
+      return user;
+    } catch {
+      throw new InternalServerErrorException('Failed to log in');
+    }
+  }
+
+  async createUser(createUserDto: CreateUserInputDto): Promise<UserDocument> {
+    try {
+      createUserDto.password = await this.encryptionService.hashPassword(
+        createUserDto.password
+      );
+
       return this.userModel.create(createUserDto);
     } catch {
       throw new InternalServerErrorException('Failed to create user');
     }
   }
 
-  async updateUser(updateUserDto: UpdateUserDto, id: string) {
+  async updateUser(updateUserDto: UpdateUserInputDto, id: string) {
     try {
       if (updateUserDto.password)
-        updateUserDto.password = await this.bcryptService.hashPassword(
+        updateUserDto.password = await this.encryptionService.hashPassword(
           updateUserDto.password
         );
 
@@ -53,7 +90,7 @@ export class UserService {
     }
   }
 
-  async getAllUsers(): Promise<UserResponseDto[]> {
+  async getAllUsers(): Promise<UserOutputDto[]> {
     try {
       return this.userModel.find({}, { _id: 1, username: 1, roles: 1 });
     } catch {

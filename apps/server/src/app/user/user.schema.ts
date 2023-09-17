@@ -1,5 +1,5 @@
 import { ROLE } from '@authorization-app/libs';
-import { Schema } from 'mongoose';
+import { Schema, Document } from 'mongoose';
 
 export const UserSchema = new Schema({
   username: {
@@ -18,3 +18,9 @@ export const UserSchema = new Schema({
     },
   ],
 });
+
+export interface UserDocument extends Document {
+  password: string;
+  roles: ROLE[];
+  username: string;
+}

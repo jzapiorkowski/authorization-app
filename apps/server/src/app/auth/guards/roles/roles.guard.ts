@@ -1,4 +1,4 @@
-import { ROLES_KEY } from './../../../../constants';
+import { ROLES_KEY } from '../../../../constants';
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { ROLE } from '@authorization-app/libs';

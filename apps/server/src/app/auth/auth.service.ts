@@ -1,47 +1,25 @@
-import { CreateUserDto } from './../dto/user.dto';
-import {
-  Injectable,
-  InternalServerErrorException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { JwtService } from './jwt/jwt.service';
-import { BcryptService } from '../bcrypt/bcrypt.service';
 import { TOKEN_EXPIRATION } from '../../constants';
-import {
-  ACCESS_TOKEN,
-  EXPIRES_IN,
-  LoginResponseDto,
-  UserResponseDto,
-} from '@authorization-app/libs';
+import { ACCESS_TOKEN, EXPIRES_IN } from '@authorization-app/libs';
+import { LoginInputDto, LoginOutputDto } from './auth.service.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
-    private jwtService: JwtService,
-    private bcryptService: BcryptService
+    private jwtService: JwtService
   ) {}
 
-  async signIn(username: string, password: string): Promise<LoginResponseDto> {
+  async signIn({ username, password }: LoginInputDto): Promise<LoginOutputDto> {
     try {
-      const user = await this.userService.findUser(username);
-
-      if (!user) {
-        throw new UnauthorizedException('User not found');
-      }
-
-      const isPasswordMatching = await this.bcryptService.checkPassword(
+      const user = await this.userService.findUser({
+        username,
         password,
-        user?.password
-      );
-
-      if (!isPasswordMatching) {
-        throw new UnauthorizedException('Password is incorrect');
-      }
+      });
 
       const payload = {
-        //@ts-ignore
         sub: user._id.toHexString(),
         username: user.username,
         roles: user.roles,
@@ -53,27 +31,6 @@ export class AuthService {
       };
     } catch {
       throw new InternalServerErrorException('Failed to log in');
-    }
-  }
-
-  async signUp(createUserDto: CreateUserDto): Promise<UserResponseDto> {
-    try {
-      const hashedPassword = await this.bcryptService.hashPassword(
-        createUserDto.password
-      );
-
-      const { _id, roles, username } = await this.userService.createUser({
-        ...createUserDto,
-        password: hashedPassword,
-      });
-
-      return {
-        _id,
-        roles,
-        username,
-      };
-    } catch {
-      throw new InternalServerErrorException('Failed to register');
     }
   }
 }

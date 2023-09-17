@@ -5,6 +5,7 @@ import {
   Controller,
   Get,
   Param,
+  Post,
   Put,
   Req,
   UnauthorizedException,
@@ -13,19 +14,49 @@ import {
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { RolesGuard } from '../auth/guards/roles/roles.guard';
 import { Roles } from '../auth/guards/roles/role.decorator';
-import { ROLE, UserResponseDto } from '@authorization-app/libs';
-import { UpdateUserDto } from '../dto/user.dto';
+import {
+  CreateUserRequestDto,
+  ROLE,
+  UpdateUserDtoRequest,
+  UserResponseDto,
+} from '@authorization-app/libs';
 
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}
+
+  @Get('')
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(ROLE.ADMIN)
+  async getAllUsers(): Promise<UserResponseDto[]> {
+    // @ts-ignore
+    return this.userService.getAllUsers();
+  }
+
+  @Post('signup')
+  async signUp(@Body() createUserDto: CreateUserRequestDto) {
+    if (!createUserDto.username) {
+      throw new BadRequestException('Username is required in the request.');
+    }
+
+    if (!createUserDto.password) {
+      throw new BadRequestException('Password is required in the request.');
+    }
+
+    await this.userService.createUser({
+      ...createUserDto,
+      roles: [...createUserDto.roles, ROLE.USER],
+    });
+
+    return { message: 'success' };
+  }
 
   @Put('update/:id')
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(ROLE.USER, ROLE.ADMIN)
   async updateUser(
     @Param('id') userId: string,
-    @Body() updateUserDto: UpdateUserDto,
+    @Body() updateUserDto: UpdateUserDtoRequest,
     @Req() req
   ) {
     const { user } = req;
@@ -45,12 +76,5 @@ export class UserController {
     }
 
     throw new UnauthorizedException('Unauthorized access');
-  }
-
-  @Get('')
-  @UseGuards(AuthGuard, RolesGuard)
-  @Roles(ROLE.ADMIN)
-  async getAllUsers(): Promise<UserResponseDto[]> {
-    return this.userService.getAllUsers();
   }
 }

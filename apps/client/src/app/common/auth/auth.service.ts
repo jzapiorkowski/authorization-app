@@ -7,9 +7,11 @@ import { UserService } from '../../shared/services/user.service';
 import { LocalStorageService } from '../local-storage/local-storage.service';
 import {
   ACCESS_TOKEN,
+  CreateUserRequestDto,
   EXPIRES_AT,
   LoginResponseDto,
   ROLE,
+  SignInDto,
   UserResponseDto,
 } from '@authorization-app/libs';
 
@@ -21,7 +23,7 @@ export class AuthService {
     private localStorageService: LocalStorageService
   ) {}
 
-  login(username: string, password: string): Observable<LoginResponseDto> {
+  login({ username, password }: SignInDto): Observable<LoginResponseDto> {
     return this.http
       .post<LoginResponseDto>('http://localhost:3000/auth/login', {
         username,
@@ -33,17 +35,17 @@ export class AuthService {
       );
   }
 
-  register(
-    username: string,
-    password: string,
-    permissions: ROLE[] = []
-  ): Observable<UserResponseDto> {
+  register({
+    username,
+    password,
+    roles = [],
+  }: CreateUserRequestDto): Observable<UserResponseDto> {
     return this.http.post<UserResponseDto>(
-      'http://localhost:3000/auth/signup',
+      'http://localhost:3000/user/signup',
       {
         username,
         password,
-        roles: [...permissions, 'USER'],
+        roles,
       }
     );
   }

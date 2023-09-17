@@ -3,10 +3,9 @@ import { AuthService } from './auth.service';
 import { UserModule } from '../user/user.module';
 import { AuthController } from './auth.controller';
 import { JwtModule } from './jwt/jwt.module';
-import { BcryptModule } from '../bcrypt/bcrypt.module';
 
 @Module({
-  imports: [UserModule, JwtModule, BcryptModule],
+  imports: [UserModule, JwtModule],
   providers: [AuthService],
   controllers: [AuthController],
   exports: [AuthService],
