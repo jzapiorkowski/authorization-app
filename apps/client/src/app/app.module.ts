@@ -6,7 +6,8 @@ import { appRoutes } from './app.routes';
 import { ComponentsModule } from './components/components.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from './shared/shared.module';
-import { interceptorsProviders } from './common/interceptors/interceptors.providers';
+import { CoreModule } from './core/core.module';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [AppComponent],
@@ -16,8 +17,11 @@ import { interceptorsProviders } from './common/interceptors/interceptors.provid
     ComponentsModule,
     BrowserAnimationsModule,
     SharedModule,
+    CoreModule,
+    ToastrModule.forRoot({
+      positionClass: 'toast-bottom-left',
+    }),
   ],
-  providers: [...interceptorsProviders],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

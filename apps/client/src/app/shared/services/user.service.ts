@@ -4,7 +4,7 @@ import {
   UserResponseDto,
 } from '@authorization-app/libs';
 import { Injectable } from '@angular/core';
-import { JwtService } from '../../common/auth/jwt/jwt.service';
+import { JwtService } from '../../core/auth/jwt/jwt.service';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 

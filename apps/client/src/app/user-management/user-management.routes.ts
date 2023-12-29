@@ -1,7 +1,7 @@
 import { Route } from '@angular/router';
 import { UserManagementComponent } from './user-management.component';
 import { SelfManagementComponent } from './self-management/self-management.component';
-import { PermissionGuard } from '../common/auth/permission.guard';
+import { PermissionGuard } from '../core/auth/permission.guard';
 import { ROLE } from '@authorization-app/libs';
 
 export const userManagementRoutes: Route[] = [
